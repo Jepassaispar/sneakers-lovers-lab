@@ -5,6 +5,8 @@ router.get("/home", (req, res) => {
   res.render("index");
 });
 
+
+
 router.get("/sneakers/:cat", (req, res) => {
   res.render("products");
 });
