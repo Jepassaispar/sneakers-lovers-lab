@@ -13,16 +13,13 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/sneakers/:cat", (req, res) => {
-  if (req.params.cat === 'collection') {
-    sneakerModel
-      .find()
-      .then(dbRes => {
-        const sneakers = dbRes;
-        console.log("All snickers" + sneakers)
-        res.render("products", {
-          sneakers
-        })
-      })
+  if (req.params.cat === "collection") {
+    sneakerModel.find().then(dbRes => {
+      const sneakers = dbRes;
+      res.render("products", {
+        sneakers
+      });
+    });
   } else {
     sneakerModel
       .find({
@@ -30,17 +27,22 @@ router.get("/sneakers/:cat", (req, res) => {
       })
       .then(dbRes => {
         let sneakers = dbRes;
-        console.log("only cat snickers" + dbRes)
         res.render("products", {
           sneakers
-        })
+        });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 });
 
 router.get("/one-product/:id", (req, res) => {
-  res.send("one_product");
+  sneakerModel.findById(req.params.id).then(dbRes => {
+    const sneaker = dbRes;
+    console.log("sneaker" + sneaker);
+    res.render("one_product", {
+      sneaker
+    });
+  });
 });
 
 router.get("/signup", (req, res) => {
@@ -71,7 +73,7 @@ router.post("/prod-add", (req, res) => {
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
-      res.render('/home')
+      res.redirect("/home");
     })
     .catch(err => {
       res.redirect("/prod-add");
