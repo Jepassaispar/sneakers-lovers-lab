@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("./../models/User");
+const sneakerModel = require('./../models/Sneaker')
+
+router.get("/", (req, res) => {
+  res.render("index");
+});
 
 router.get("/home", (req, res) => {
   res.render("index");
@@ -26,6 +31,25 @@ router.get("/prod-add", (req, res) => {
   res.render("products_add");
 });
 
+router.post('/prod-add', (req, res) => {
+  const newSneaker = {
+    name: req.body.name,
+    ref: req.body.ref,
+    sizes: req.body.size,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category,
+  }
+  sneakerModel
+    .create(newSneaker)
+    .then(dbRes => {
+      res.redirect('/home')
+    })
+    .catch(err => {
+      res.redirect('/prod-add')
+    })
+})
+
 router.get("/prod-manage", (req, res) => {
   res.render("product_edit")
 });
@@ -44,9 +68,7 @@ router.post("/signup", (req, res) => {
     .then(dbRes => {
       if (dbRes) {
         res.redirect("/home");
-        console.log("user exist");
       } else {
-        console.log("coucou je suis là");
         userModel
           .create(newUser)
           .then(dbRes => {
