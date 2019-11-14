@@ -82,6 +82,4 @@ const listener = app.listen(process.env.PORT, () => {
   );
 });
 
-console.log(listener)
-
 module.exports = app;
