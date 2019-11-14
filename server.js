@@ -58,7 +58,7 @@ function checkloginStatus(req, res, next) {
 
 function eraseSessionMessage() {
   var count = 0; // initialize counter in parent scope and use it in inner function
-  return function(req, res, next) {
+  return function (req, res, next) {
     if (req.session.msg) {
       // only increment if session contains msg
       if (count) {
@@ -78,6 +78,15 @@ app.use(eraseSessionMessage());
 // Getting/Using router(s)
 const basePageRouter = require("./routes/index");
 app.use("/", basePageRouter);
+
+const auth = require("./routes/auth");
+app.use("/", auth);
+
+const label = require('./routes/label');
+app.use('/', label)
+
+const snicker = require('./routes/sneacker');
+app.use('/', snicker)
 
 const listener = app.listen(process.env.PORT, () => {
   console.log(`app started at ${process.env.SITE_URL}:${process.env.PORT}`);
