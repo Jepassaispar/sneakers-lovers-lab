@@ -3,6 +3,7 @@ const router = express.Router();
 const userModel = require("./../models/User");
 const sneakerModel = require("./../models/Sneaker");
 const tagModel = require("./../models/Tag");
+const uploader = require("./../config/cloudinary");
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -13,16 +14,13 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/sneakers/:cat", (req, res) => {
-  if (req.params.cat === 'collection') {
-    sneakerModel
-      .find()
-      .then(dbRes => {
-        const sneakers = dbRes;
-        console.log("All snickers" + sneakers)
-        res.render("products", {
-          sneakers
-        })
-      })
+  if (req.params.cat === "collection") {
+    sneakerModel.find().then(dbRes => {
+      const sneakers = dbRes;
+      res.render("products", {
+        sneakers
+      });
+    });
   } else {
     sneakerModel
       .find({
@@ -30,12 +28,12 @@ router.get("/sneakers/:cat", (req, res) => {
       })
       .then(dbRes => {
         let sneakers = dbRes;
-        console.log("only cat snickers" + dbRes)
+        console.log("only cat snickers" + dbRes);
         res.render("products", {
           sneakers
-        })
+        });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 });
 
@@ -59,19 +57,21 @@ router.get("/prod-add", (req, res) => {
   });
 });
 
-router.post("/prod-add", (req, res) => {
+router.post("/prod-add", uploader.single("img"), (req, res) => {
   const newSneaker = {
     name: req.body.name,
     ref: req.body.ref,
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
+    img: req.body.img,
     category: req.body.category
   };
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
-      res.render('/home')
+      console.log(dbRes);
+      res.redirect("/home");
     })
     .catch(err => {
       res.redirect("/prod-add");
