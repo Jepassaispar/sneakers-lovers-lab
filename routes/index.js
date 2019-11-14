@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("./../models/User");
+const sneakerModel = require("./../models/Sneaker");
+
+router.get("/", (req, res) => {
+  res.render("index");
+});
 
 router.get("/home", (req, res) => {
   res.render("index");
@@ -26,8 +31,34 @@ router.get("/prod-add", (req, res) => {
   res.render("products_add");
 });
 
+router.post("products_add", (req, res) => {
+  const newSneakers = {
+    name: ,
+    ref: String,
+    sizes: Number,
+    description: String,
+    price: Number,
+    category: [
+      {
+        men: Boolean
+      },
+      {
+        women: Boolean
+      },
+      {
+        kids: Boolean
+      }
+    ],
+    id_tags: {
+      type: Schema.types.ObjectId,
+      ref: "tag"
+    }
+  };
+  sneaker
+});
+
 router.get("/prod-manage", (req, res) => {
-  res.render("product_edit")
+  res.render("product_edit");
 });
 
 router.post("/signup", (req, res) => {

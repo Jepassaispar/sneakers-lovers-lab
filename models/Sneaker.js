@@ -2,25 +2,26 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema();
 
 const sneakerSchema = new Schema({
-    name: String,
-    ref: String,
-    sizes: [Number],
-    description: String,
-    price: Number,
-    category: [{
-            men: Boolean
-        },
-        {
-            women: Boolean
-        },
-        {
-            kids: Boolean
-        }
-    ],
-    id_tags: {
-        type: Schema.types.ObjectId,
-        ref: "tag"
+  name: String,
+  ref: String,
+  sizes: Number,
+  description: String,
+  price: Number,
+  category: [
+    {
+      men: Boolean
+    },
+    {
+      women: Boolean
+    },
+    {
+      kids: Boolean
     }
+  ],
+  id_tags: {
+    type: Schema.types.ObjectId,
+    ref: "tag"
+  }
 });
 
 const sneakerModel = mongoose.model("Sneaker", sneakerSchema);
