@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("./../models/User");
-const sneakerModel = require('./../models/Sneaker')
+const sneakerModel = require("./../models/Sneaker");
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -31,52 +31,25 @@ router.get("/prod-add", (req, res) => {
   res.render("products_add");
 });
 
-<<<<<<< HEAD
-router.post("products_add", (req, res) => {
-  const newSneakers = {
-    name: ,
-    ref: String,
-    sizes: Number,
-    description: String,
-    price: Number,
-    category: [
-      {
-        men: Boolean
-      },
-      {
-        women: Boolean
-      },
-      {
-        kids: Boolean
-      }
-    ],
-    id_tags: {
-      type: Schema.types.ObjectId,
-      ref: "tag"
-    }
-  };
-  sneaker
-});
-=======
-router.post('/prod-add', (req, res) => {
+router.post("/prod-add", (req, res) => {
   const newSneaker = {
     name: req.body.name,
     ref: req.body.ref,
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
-    category: req.body.category,
-  }
+    category: req.body["Category"]
+  };
+  console.log(req.body["Category"]);
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
-      res.redirect('/home')
+      res.redirect("/home");
     })
     .catch(err => {
-      res.redirect('/prod-add')
-    })
-})
->>>>>>> 6bf642e2522929e7097814c3c7ce5e3dbd3e3aa5
+      res.redirect("/prod-add");
+    });
+});
 
 router.get("/prod-manage", (req, res) => {
   res.render("product_edit");
