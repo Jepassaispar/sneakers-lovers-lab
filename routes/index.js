@@ -38,11 +38,12 @@ router.post('/prod-add', (req, res) => {
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
-    category: req.body.category,
+    category: req.body.option,
   }
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
+      console.log(req.body.category)
       res.redirect('/home')
     })
     .catch(err => {
