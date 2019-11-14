@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("./../models/User");
-const sneakerModel = require('./../models/Sneaker')
+const sneakerModel = require("./../models/Sneaker");
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -12,7 +12,30 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/sneakers/:cat", (req, res) => {
-  res.render("products");
+  if (req.params.cat === 'collection') {
+    sneakerModel
+      .find()
+      .then(dbRes => {
+        const sneakers = dbRes;
+        console.log("All snickers" + sneakers)
+        res.render("products", {
+          sneakers
+        })
+      })
+  } else {
+    sneakerModel
+      .find({
+        category: req.params.cat
+      })
+      .then(dbRes => {
+        let sneakers = dbRes;
+        console.log("only cat snickers" + dbRes)
+        res.render("products", {
+          sneakers
+        })
+      })
+      .catch(err => console.log(err))
+  }
 });
 
 router.get("/one-product/:id", (req, res) => {
@@ -31,28 +54,27 @@ router.get("/prod-add", (req, res) => {
   res.render("products_add");
 });
 
-router.post('/prod-add', (req, res) => {
+router.post("/prod-add", (req, res) => {
   const newSneaker = {
     name: req.body.name,
     ref: req.body.ref,
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
-    category: req.body.option,
+    category: req.body.category,
   }
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
-      console.log(req.body.category)
-      res.redirect('/home')
+      res.render('/home')
     })
     .catch(err => {
-      res.redirect('/prod-add')
-    })
-})
+      res.redirect("/prod-add");
+    });
+});
 
 router.get("/prod-manage", (req, res) => {
-  res.render("product_edit")
+  res.render("product_edit");
 });
 
 router.post("/signup", (req, res) => {
