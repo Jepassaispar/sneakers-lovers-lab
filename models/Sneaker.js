@@ -7,7 +7,11 @@ const sneakerSchema = new Schema({
   sizes: Number,
   description: String,
   price: Number,
-  img: String,
+  img: {
+    type: String,
+    default: "/baskets_uihdnr.jpg"
+  },
+
   category: {
     type: String,
     enum: ["men", "women", "kids"]
