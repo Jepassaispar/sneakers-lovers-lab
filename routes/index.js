@@ -22,8 +22,12 @@ router.get("/signin", (req, res) => {
   res.render("signin");
 });
 
-router.get("/create-sneaker", (req, res) => {
-  res.render("forms/sneaker");
+router.get("/prod-add", (req, res) => {
+  res.render("products_add");
+});
+
+router.get("/prod-manage", (req, res) => {
+  res.render("product_edit")
 });
 
 router.post("/signup", (req, res) => {
