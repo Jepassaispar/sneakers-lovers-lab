@@ -3,6 +3,7 @@ const router = express.Router();
 const userModel = require("./../models/User");
 const sneakerModel = require("./../models/Sneaker");
 const tagModel = require("./../models/Tag");
+const uploader = require("./../config/cloudinary");
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -61,13 +62,14 @@ router.get("/prod-add", (req, res) => {
   });
 });
 
-router.post("/prod-add", (req, res) => {
+router.post("/prod-add", uploader.single("img"), (req, res) => {
   const newSneaker = {
     name: req.body.name,
     ref: req.body.ref,
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
+    img: req.body.img,
     category: req.body.category
   };
   sneakerModel
