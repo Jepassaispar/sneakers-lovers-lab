@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userModel = require("./../models/User");
 const sneakerModel = require("./../models/Sneaker");
+const tagModel = require("./../models/Tag");
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -51,7 +52,11 @@ router.get("/signin", (req, res) => {
 });
 
 router.get("/prod-add", (req, res) => {
-  res.render("products_add");
+  tagModel.find().then(dbRes => {
+    res.render("products_add", {
+      tags: dbRes
+    });
+  });
 });
 
 router.post("/prod-add", (req, res) => {
@@ -61,8 +66,8 @@ router.post("/prod-add", (req, res) => {
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
-    category: req.body.category,
-  }
+    category: req.body.category
+  };
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
@@ -70,6 +75,21 @@ router.post("/prod-add", (req, res) => {
     })
     .catch(err => {
       res.redirect("/prod-add");
+    });
+});
+
+router.post("/tag-add", (req, res) => {
+  const newTag = {
+    label: req.body.label
+  };
+  tagModel
+    .create(newTag)
+    .then(dbRes => {
+      res.redirect("/home");
+    })
+    .catch(err => {
+      console.log(err);
+      // res.redirect("/prod-add");
     });
 });
 
