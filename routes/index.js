@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userModel = require('./../models/User')
+const userModel = require("./../models/User");
 
 router.get("/home", (req, res) => {
   res.render("index");
@@ -22,33 +22,36 @@ router.get("/signin", (req, res) => {
   res.render("signin");
 });
 
+router.get("/create-sneaker", (req, res) => {
+  res.render("forms/sneaker");
+});
+
 router.post("/signup", (req, res) => {
   const newUser = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
     password: req.body.password
-  }
+  };
   userModel
     .findOne({
-      'email': req.body.email
+      email: req.body.email
     })
     .then(dbRes => {
       if (dbRes) {
-        res.redirect('/home')
-        console.log("user exist")
+        res.redirect("/home");
+        console.log("user exist");
       } else {
-        console.log("coucou je suis là")
+        console.log("coucou je suis là");
         userModel
           .create(newUser)
           .then(dbRes => {
-            res.redirect('/home')
+            res.redirect("/home");
           })
-          .catch(err => console.log(err))
+          .catch(err => console.log(err));
       }
     })
-    .catch(err => console.log(err))
-
-})
+    .catch(err => console.log(err));
+});
 
 module.exports = router;
