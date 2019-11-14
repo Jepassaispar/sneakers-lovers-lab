@@ -46,6 +46,36 @@ router.get("/one-product/:id", (req, res) => {
   });
 });
 
+router.post("/product-delete/:id", (req, res) => {
+  sneakerModel
+    .findByIdAndDelete(req.params.id)
+    .then(res.redirect('/prod-manage'))
+})
+
+router.get('/product-edit/:id', (req, res) => {
+  sneakerModel
+    .findById(req.params.id)
+    .then(dbRes => {
+      const sneaker = dbRes;
+      console.log(sneaker)
+      res.render('product_edit', sneaker)
+    })
+})
+
+router.post('/product-edit/:id', (req, res) => {
+  const editedSneaker = {
+    name: req.body.name,
+    ref: req.body.ref,
+    sizes: req.body.size,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category
+  }
+  sneakerModel
+    .findByIdAndUpdate(req.params.id, editedSneaker)
+    .then(res.redirect('/home'))
+})
+
 router.get("/signup", (req, res) => {
   res.render("signup");
 });
@@ -92,13 +122,22 @@ router.post("/tag-add", (req, res) => {
       res.redirect("/home");
     })
     .catch(err => {
-      console.log(err);
+      console.log(err)
       // res.redirect("/prod-add");
     });
 });
 
 router.get("/prod-manage", (req, res) => {
-  res.render("product_edit");
+  sneakerModel
+    .find()
+    .then(dbRes => {
+      console.log(dbRes)
+      const sneakers = dbRes;
+      res.render("products_manage", {
+        sneakers
+      })
+    })
+    .catch(err => console.log(err))
 });
 
 router.post("/signup", (req, res) => {
