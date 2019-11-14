@@ -69,7 +69,7 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
     sizes: req.body.size,
     description: req.body.description,
     price: req.body.price,
-    img: req.body.img,
+    img: req.file.secure_url,
     category: req.body.category
   };
   sneakerModel
