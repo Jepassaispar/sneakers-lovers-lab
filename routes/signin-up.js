@@ -16,7 +16,6 @@ router.get("/signin", (req, res) => {
 });
 
 router.post("/signup", (req, res) => {
-
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const email = req.body.email;
@@ -59,16 +58,19 @@ router.post('/signin', (req, res) => {
     }
     userModel
         .findOne({
-            "username": inputEmail
-        } && {
-            "password": inputPassword
+            "email": inputEmail
         })
         .then(dbRes => {
             if (!dbRes) {
-                console.log("Email taken");
-                res.redirect('signin')
+                console.log("Email not registered");
+                return;
+            }
+            if (bcrypt.compareSync(inputPassword, dbRes.password)) {
+                req.session.currentUser = dbRes;
+                res.redirect('home');
             } else {
-
+                console.log("incorrect password !");
+                res.render('signin');
             }
         })
 })
