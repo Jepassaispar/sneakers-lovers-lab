@@ -7,18 +7,7 @@ const uploader = require("../config/cloudinary");
 router.get("/sneakers/:cat", (req, res) => {
     if (req.params.cat === "collection") {
         sneakerModel.find().populate('tags').then(dbRes => {
-            const sneakers = dbRes;
-            res.render("products", {
-                sneakers
-            });
-        });
-    } else {
-        sneakerModel
-            .find({
-                category: req.params.cat
-            })
-            .then(dbRes => {
-                let sneakers = dbRes;
+                const sneakers = dbRes;
                 res.render("products", {
                     sneakers
                 });
@@ -78,6 +67,20 @@ router.post('/product-edit/:id', (req, res) => {
         })
 })
 
+router.post("/product-edit/:id", (req, res) => {
+    const editedSneaker = {
+        name: req.body.name,
+        ref: req.body.ref,
+        sizes: req.body.size,
+        description: req.body.description,
+        price: req.body.price,
+        category: req.body.category,
+        id_tags: req.body.id_tags
+    };
+    sneakerModel.findByIdAndUpdate(req.params.id, editedSneaker).then(dbRes => {
+        res.redirect("/home");
+    });
+});
 
 router.get("/prod-add", (req, res) => {
     tagModel.find().populate('tags').then(dbRes => {
@@ -87,6 +90,8 @@ router.get("/prod-add", (req, res) => {
     });
 });
 
+// res.redirect("prod-add")
+
 router.post("/prod-add", uploader.single("img"), (req, res) => {
     const newSneaker = {
         name: req.body.name,
@@ -94,10 +99,13 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
         sizes: req.body.size,
         description: req.body.description,
         price: req.body.price,
-        img: req.file.secure_url,
+        img: "",
         category: req.body.category,
-        tags: req.body.id_tags
+        id_tags: req.body.id_tags
     };
+    if (req.file) {
+        newSneaker.img = req.file.secure_url;
+    } else res.redirect("/prod-add");
     sneakerModel
         .create(newSneaker)
         .then(dbRes => {
@@ -107,8 +115,6 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
             res.redirect("/prod-add");
         });
 });
-
-
 
 router.get("/prod-manage", (req, res) => {
     sneakerModel
