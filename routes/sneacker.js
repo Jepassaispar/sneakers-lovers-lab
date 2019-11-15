@@ -7,9 +7,12 @@ const uploader = require("../config/cloudinary");
 router.get("/sneakers/:cat", (req, res) => {
     if (req.params.cat === "collection") {
         sneakerModel.find().populate('tags').then(dbRes => {
+                const tags = dbRes.tags;
+                console.log(dbRes);
                 const sneakers = dbRes;
                 res.render("products", {
-                    sneakers
+                    sneakers,
+                    tags
                 });
             })
             .catch(err => console.log(err));
@@ -18,9 +21,12 @@ router.get("/sneakers/:cat", (req, res) => {
                 'category': req.params.cat
             })
             .then(dbRes => {
+                const tags = dbRes.tags;
+                console.log(dbRes);
                 const sneakers = dbRes;
                 res.render('products', {
-                    sneakers
+                    sneakers,
+                    tags
                 })
             })
             .catch(err => console.log(err))
@@ -39,7 +45,7 @@ router.get("/one-product/:id", (req, res) => {
 router.post("/product-delete/:id", (req, res) => {
     sneakerModel
         .findByIdAndDelete(req.params.id)
-        .then(res.redirect('prod-manage'))
+        .then(res.redirect('/prod-manage'))
 })
 
 router.get('/product-edit/:id', (req, res) => {
