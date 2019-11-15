@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: calc(100vh - (84px));
 
 }
-.one-product-container > * {
+
+.one-product-container>* {
   margin-bottom: 1.2rem;
 }
 
@@ -27,6 +27,7 @@
   margin-top: .5rem;
   color: rgb(151, 151, 151);
 }
+
 .sneak-select {
   width: 135px;
   margin-right: 1rem;

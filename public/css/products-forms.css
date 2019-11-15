@@ -1,12 +1,10 @@
-.add-product-form, .edit-product-form{
+.add-product-form,
+.edit-product-form {
   width: 30%;
   margin-right: 2rem;
 }
-.add-tag-form{
-  width: 30%;
-}
 
-.product-manage-wrapper{
+.product-manage-wrapper {
   padding: 2rem 1.2rem;
 }
 
@@ -15,11 +13,11 @@
   margin-bottom: 1.1rem;
 }
 
-h3.form-title{
+h3.form-title {
   border-bottom: 1px solid rgb(212, 212, 212);
   padding-bottom: .8rem;
   margin-bottom: .8rem;
-  font-size:1.2rem; 
+  font-size: 1.2rem;
 }
 
 .select {
