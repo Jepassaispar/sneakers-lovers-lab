@@ -13,6 +13,17 @@ router.get("/sneakers/:cat", (req, res) => {
                 });
             })
             .catch(err => console.log(err));
+    } else {
+        sneakerModel.find({
+                'category': req.params.cat
+            })
+            .then(dbRes => {
+                const sneakers = dbRes;
+                res.render('products', {
+                    sneakers
+                })
+            })
+            .catch(err => console.log(err))
     }
 });
 
@@ -28,7 +39,7 @@ router.get("/one-product/:id", (req, res) => {
 router.post("/product-delete/:id", (req, res) => {
     sneakerModel
         .findByIdAndDelete(req.params.id)
-        .then(res.redirect('/prod-manage'))
+        .then(res.redirect('prod-manage'))
 })
 
 router.get('/product-edit/:id', (req, res) => {
