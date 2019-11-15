@@ -123,17 +123,16 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
     };
     if (req.file) {
         newSneaker.img = req.file.secure_url;
-        sneakerModel
-            .create(newSneaker)
-            .then(dbRes => {
-                console.log(dbRes)
-                res.redirect("/home");
-            })
-            .catch(err => {
-                res.redirect("/prod-add");
-            });
     } else res.redirect("/prod-add");
-
+    sneakerModel
+        .create(newSneaker)
+        .then(dbRes => {
+            console.log(dbRes)
+            res.redirect("/home");
+        })
+        .catch(err => {
+            res.redirect("/prod-add");
+        });
 });
 
 router.get("/prod-manage", (req, res) => {
