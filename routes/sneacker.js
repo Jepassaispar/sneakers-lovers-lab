@@ -6,7 +6,7 @@ const uploader = require("../config/cloudinary");
 
 router.get("/sneakers/:cat", (req, res) => {
     if (req.params.cat === "collection") {
-        sneakerModel.find().then(dbRes => {
+        sneakerModel.find().populate('tags').then(dbRes => {
             const sneakers = dbRes;
             res.render("products", {
                 sneakers
@@ -28,9 +28,8 @@ router.get("/sneakers/:cat", (req, res) => {
 });
 
 router.get("/one-product/:id", (req, res) => {
-    sneakerModel.findById(req.params.id).populate("id_tags").then(dbRes => {
+    sneakerModel.findById(req.params.id).populate("tags").then(dbRes => {
         const sneaker = dbRes;
-        console.log("sneaker" + sneaker);
         res.render("one_product", {
             sneaker
         });
@@ -44,15 +43,22 @@ router.post("/product-delete/:id", (req, res) => {
 })
 
 router.get('/product-edit/:id', (req, res) => {
-    sneakerModel
+    Promise.all([sneakerModel
         .findById(req.params.id)
-        .populate('id_tags')
-        .then(dbRes => {
-            const sneaker = dbRes;
-            console.log(sneaker)
-            res.render('product_edit', sneaker)
+        .populate('tags'), tagModel
+        .find()
+    ]).then(dbRes => {
+        console.log(dbRes[0])
+        const sneaker = dbRes[0];
+        const tags = dbRes[1];
+        res.render("product_edit", {
+            sneaker,
+            tags
         })
+    }).catch(err => console.log(err))
 })
+
+
 
 router.post('/product-edit/:id', (req, res) => {
     const editedSneaker = {
@@ -62,20 +68,19 @@ router.post('/product-edit/:id', (req, res) => {
         description: req.body.description,
         price: req.body.price,
         category: req.body.category,
-        id_tags: req.body.id_tags
+        tags: req.body.id_tags
     }
     sneakerModel
         .findByIdAndUpdate(req.params.id, editedSneaker)
         .then(dbRes => {
             sneakerModel
-            console.log(dbRes)
             res.redirect('/home')
         })
 })
 
 
 router.get("/prod-add", (req, res) => {
-    tagModel.find().populate('id_tags').then(dbRes => {
+    tagModel.find().populate('tags').then(dbRes => {
         res.render("products_add", {
             tags: dbRes
         });
@@ -91,7 +96,7 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
         price: req.body.price,
         img: req.file.secure_url,
         category: req.body.category,
-        id_tags: req.body.id_tags
+        tags: req.body.id_tags
     };
     sneakerModel
         .create(newSneaker)
@@ -109,7 +114,6 @@ router.get("/prod-manage", (req, res) => {
     sneakerModel
         .find()
         .then(dbRes => {
-            console.log(dbRes)
             const sneakers = dbRes;
             res.render("products_manage", {
                 sneakers
