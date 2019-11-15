@@ -28,7 +28,7 @@ router.get("/sneakers/:cat", (req, res) => {
 });
 
 router.get("/one-product/:id", (req, res) => {
-    sneakerModel.findById(req.params.id).then(dbRes => {
+    sneakerModel.findById(req.params.id).populate("id_tags").then(dbRes => {
         const sneaker = dbRes;
         console.log("sneaker" + sneaker);
         res.render("one_product", {
@@ -46,6 +46,7 @@ router.post("/product-delete/:id", (req, res) => {
 router.get('/product-edit/:id', (req, res) => {
     sneakerModel
         .findById(req.params.id)
+        .populate('id_tags')
         .then(dbRes => {
             const sneaker = dbRes;
             console.log(sneaker)
@@ -60,16 +61,21 @@ router.post('/product-edit/:id', (req, res) => {
         sizes: req.body.size,
         description: req.body.description,
         price: req.body.price,
-        category: req.body.category
+        category: req.body.category,
+        id_tags: req.body.id_tags
     }
     sneakerModel
         .findByIdAndUpdate(req.params.id, editedSneaker)
-        .then(res.redirect('/home'))
+        .then(dbRes => {
+            sneakerModel
+            console.log(dbRes)
+            res.redirect('/home')
+        })
 })
 
 
 router.get("/prod-add", (req, res) => {
-    tagModel.find().then(dbRes => {
+    tagModel.find().populate('id_tags').then(dbRes => {
         res.render("products_add", {
             tags: dbRes
         });
@@ -85,7 +91,7 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
         price: req.body.price,
         img: req.file.secure_url,
         category: req.body.category,
-
+        id_tags: req.body.id_tags
     };
     sneakerModel
         .create(newSneaker)
