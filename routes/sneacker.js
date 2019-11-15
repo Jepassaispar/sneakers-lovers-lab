@@ -99,7 +99,7 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
         sizes: req.body.size,
         description: req.body.description,
         price: req.body.price,
-        img: "",
+        img: "https://images-na.ssl-images-amazon.com/images/I/71un1O0nQOL._UY500_.jpg",
         category: req.body.category,
         id_tags: req.body.id_tags
     };
