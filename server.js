@@ -72,6 +72,21 @@ function eraseSessionMessage() {
   };
 }
 
+
+const bcrypt     = require("bcrypt");
+const saltRounds = 10;
+
+const plainPassword1 = "HelloWorld";
+const plainPassword2 = "helloworld";
+
+const salt  = bcrypt.genSaltSync(saltRounds);
+const hash1 = bcrypt.hashSync(plainPassword1, salt);
+const hash2 = bcrypt.hashSync(plainPassword2, salt);
+
+console.log("Hash 1 -", hash1);
+console.log("Hash 2 -", hash2);
+
+
 app.use(checkloginStatus);
 app.use(eraseSessionMessage());
 
@@ -87,6 +102,9 @@ app.use('/', label)
 
 const snicker = require('./routes/sneacker');
 app.use('/', snicker)
+
+const signinUp = require('./routes/signin-up');
+app.use('/', signinUp)
 
 const listener = app.listen(process.env.PORT, () => {
   console.log(`app started at ${process.env.SITE_URL}:${process.env.PORT}`);
