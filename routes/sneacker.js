@@ -90,7 +90,7 @@ router.post("/product-edit/:id", (req, res) => {
     description: req.body.description,
     price: req.body.price,
     category: req.body.category,
-    id_tags: req.body.id_tags
+    tags: req.body.id_tags
   };
   sneakerModel.findByIdAndUpdate(req.params.id, editedSneaker).then(dbRes => {
     res.redirect("/home");
@@ -120,7 +120,7 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
     img:
       "https://images-na.ssl-images-amazon.com/images/I/71un1O0nQOL._UY500_.jpg",
     category: req.body.category,
-    id_tags: req.body.id_tags
+    tags: req.body.id_tags
   };
   if (req.file) {
     newSneaker.img = req.file.secure_url;
@@ -128,6 +128,7 @@ router.post("/prod-add", uploader.single("img"), (req, res) => {
   sneakerModel
     .create(newSneaker)
     .then(dbRes => {
+      console.log(dbRes);
       res.redirect("/home");
     })
     .catch(err => {

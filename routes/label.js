@@ -3,6 +3,7 @@ const router = express.Router();
 const sneakerModel = require("./../models/Sneaker");
 const tagModel = require("./../models/Tag");
 const uploader = require("./../config/cloudinary");
+const axios = require("axios");
 
 router.post("/tag-add", (req, res) => {
   const newTag = {
