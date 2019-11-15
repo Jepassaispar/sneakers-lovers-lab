@@ -11,8 +11,13 @@ router.get("/sneakers/:cat", (req, res) => {
       .populate("tags")
       .then(dbRes => {
         const sneakers = dbRes;
-        res.render("products", {
-          sneakers
+        tagModel.find().then(dbRes2 => {
+          const tags = dbRes2;
+
+          res.render("products", {
+            sneakers,
+            tags
+          });
         });
       })
       .catch(err => console.log(err));
@@ -23,8 +28,15 @@ router.get("/sneakers/:cat", (req, res) => {
       })
       .then(dbRes => {
         const sneakers = dbRes;
-        res.render("products", {
-          sneakers
+        tagModel.find().then(dbRes2 => {
+          const tags = dbRes2;
+          // tags.forEach(label => {
+          //     console.log(label)
+          // });
+          res.render("products", {
+            sneakers,
+            tags
+          });
         });
       })
       .catch(err => console.log(err));
